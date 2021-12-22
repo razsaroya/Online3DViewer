@@ -1,11 +1,12 @@
 var assert = require ('assert');
 var testFiles = require ('../utils/testfiles.js');
 var testUtils = require ('../utils/testutils.js');
+const {CheckModel} = require("../../source/model/modelfinalization");
 
 describe ('3ds Importer', function() {
     it ('cube_with_materials.3ds', function (done) {
         testFiles.Import3dsFile ('cube_with_materials.3ds', function (model) {
-            assert (OV.CheckModel (model));
+            assert (CheckModel (model));
             assert.deepStrictEqual (testUtils.ModelToObjectSimple (model), {
                 name : '',
                 materials : [
@@ -35,7 +36,7 @@ describe ('3ds Importer', function() {
 
     it ('cube_with_texture_transformations.3ds', function (done) {
         testFiles.Import3dsFile ('cube_with_texture_transformations.3ds', function (model) {
-            assert (OV.CheckModel (model));
+            assert (CheckModel (model));
             assert.deepStrictEqual (testUtils.ModelToObjectSimple (model), {
                 name : '',
                 materials : [
@@ -65,7 +66,7 @@ describe ('3ds Importer', function() {
 
     it ('cube_two_instances.3ds', function (done) {
         testFiles.Import3dsFile ('cube_two_instances.3ds', function (model) {
-            assert (OV.CheckModel (model));
+            assert (CheckModel (model));
             assert.deepStrictEqual (testUtils.ModelToObjectSimple (model), {
                 name : '',
                 materials : [
@@ -106,7 +107,7 @@ describe ('3ds Importer', function() {
 
     it ('cube_four_instances.3ds', function (done) {
         testFiles.Import3dsFile ('cube_four_instances.3ds', function (model) {
-            assert (OV.CheckModel (model));
+            assert (CheckModel (model));
             assert.deepStrictEqual (testUtils.ModelToObjectSimple (model), {
                 name : '',
                 materials : [
@@ -169,7 +170,7 @@ describe ('3ds Importer', function() {
 
     it ('cube_hierarchy.3ds', function (done) {
         testFiles.Import3dsFile ('cube_hierarchy.3ds', function (model) {
-            assert (OV.CheckModel (model));
+            assert (CheckModel (model));
             assert.deepStrictEqual (testUtils.ModelToObjectSimple (model), {
                 name: '',
                 materials: [ { name: 'c_tex' }, { name: 'c_red' }, { name: 'c_blue' } ],

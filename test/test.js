@@ -1,10 +1,11 @@
+let ExternalLibLocation = require("../source/io/externallibs.js");
 var fs = require ('fs');
 process.chdir (__dirname);
 
 require ('./utils/globals.js');
 require ('./utils/importall.js');
 
-OV.ExternalLibLocation = '../../libs';
+ExternalLibLocation = '../../libs';
 
 var testDirName = './tests/';
 var files = fs.readdirSync (testDirName, { withFileTypes: true });

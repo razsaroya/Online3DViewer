@@ -1,8 +1,17 @@
 var assert = require ('assert');
+const {CoordIsEqual3D} = require("../../source/geometry/coord3d");
+const {TransformMesh} = require("../../source/model/modelutils");
+const {Transformation} = require("../../source/geometry/transformation");
+const {QuaternionFromAxisAngle} = require("../../source/geometry/quaternion");
+const {Triangle} = require("../../source/model/triangle");
+const {Coord2D} = require("../../source/geometry/coord2d");
+const {Coord3D} = require("../../source/geometry/coord3d");
+const {Mesh} = require("../../source/model/mesh");
+const Matrix = require("../../source/geometry/matrix");
 
 describe ('Mesh', function() {
     it ('Default Initialization', function () {
-        var mesh = new OV.Mesh ();
+        var mesh = new Mesh ();
         assert.strictEqual (mesh.GetName (), '');
         assert.strictEqual (mesh.VertexCount (), 0);
         assert.strictEqual (mesh.NormalCount (), 0);
@@ -11,14 +20,14 @@ describe ('Mesh', function() {
     });
 
     it ('Set Name', function () {
-        var mesh = new OV.Mesh ();
+        var mesh = new Mesh ();
         mesh.SetName ('example');
         assert.strictEqual (mesh.GetName (), 'example');
     });
 
     it ('Add Vertex', function () {
-        var mesh = new OV.Mesh ();
-        var index = mesh.AddVertex (new OV.Coord3D (1.0, 2.0, 3.0))
+        var mesh = new Mesh ();
+        var index = mesh.AddVertex (new Coord3D (1.0, 2.0, 3.0))
         assert.strictEqual (index, 0);
         assert.strictEqual (mesh.VertexCount (), 1);
         var vertex = mesh.GetVertex (index);
@@ -28,8 +37,8 @@ describe ('Mesh', function() {
     });
 
     it ('Add Normal', function () {
-        var mesh = new OV.Mesh ();
-        var index = mesh.AddNormal (new OV.Coord3D (1.0, 2.0, 3.0))
+        var mesh = new Mesh ();
+        var index = mesh.AddNormal (new Coord3D (1.0, 2.0, 3.0))
         assert.strictEqual (index, 0);
         assert.strictEqual (mesh.NormalCount (), 1);
         var normal = mesh.GetNormal (index);
@@ -39,8 +48,8 @@ describe ('Mesh', function() {
     });
 
     it ('Add Texture UV', function () {
-        var mesh = new OV.Mesh ();
-        var index = mesh.AddTextureUV (new OV.Coord2D (1.0, 2.0))
+        var mesh = new Mesh ();
+        var index = mesh.AddTextureUV (new Coord2D (1.0, 2.0))
         assert.strictEqual (index, 0);
         assert.strictEqual (mesh.TextureUVCount (), 1);
         var uv = mesh.GetTextureUV (index);
@@ -49,8 +58,8 @@ describe ('Mesh', function() {
     });
 
     it ('Add Triangle', function () {
-        var mesh = new OV.Mesh ();
-        var triangle = new OV.Triangle (1, 2, 3);
+        var mesh = new Mesh ();
+        var triangle = new Triangle (1, 2, 3);
         var index = mesh.AddTriangle (triangle);
         assert.strictEqual (index, 0);
         assert.strictEqual (mesh.TriangleCount (), 1);
@@ -71,28 +80,28 @@ describe ('Mesh', function() {
     });
 
     it ('Transform Mesh', function () {
-        var mesh = new OV.Mesh ();
-        mesh.AddVertex (new OV.Coord3D (0.0, 0.0, 0.0));
-        mesh.AddVertex (new OV.Coord3D (1.0, 0.0, 0.0));
-        mesh.AddVertex (new OV.Coord3D (1.0, 1.0, 0.0));
-        mesh.AddNormal (new OV.Coord3D (0.0, 0.0, 1.0));
-        mesh.AddTextureUV (new OV.Coord2D (0.0, 0.0));
-        mesh.AddTextureUV (new OV.Coord2D (1.0, 0.0));
-        mesh.AddTextureUV (new OV.Coord2D (1.0, 1.0));
-        var triangle = new OV.Triangle (0, 1, 2);
+        var mesh = new Mesh ();
+        mesh.AddVertex (new Coord3D (0.0, 0.0, 0.0));
+        mesh.AddVertex (new Coord3D (1.0, 0.0, 0.0));
+        mesh.AddVertex (new Coord3D (1.0, 1.0, 0.0));
+        mesh.AddNormal (new Coord3D (0.0, 0.0, 1.0));
+        mesh.AddTextureUV (new Coord2D (0.0, 0.0));
+        mesh.AddTextureUV (new Coord2D (1.0, 0.0));
+        mesh.AddTextureUV (new Coord2D (1.0, 1.0));
+        var triangle = new Triangle (0, 1, 2);
         triangle.SetNormals (0, 0, 0);
         triangle.SetTextureUVs (0, 1, 2);
         mesh.AddTriangle (triangle);
 
-        let rotation = OV.QuaternionFromAxisAngle (new OV.Coord3D (0.0, 1.0, 0.0), -Math.PI / 2.0);
-        let transformation = new OV.Transformation ();
-        transformation.AppendMatrix (new OV.Matrix ().CreateScale (2.0, 1.0, 1.0));
-        transformation.AppendMatrix (new OV.Matrix ().CreateRotation (rotation.x, rotation.y, rotation.z, rotation.w));
-        transformation.AppendMatrix (new OV.Matrix ().CreateTranslation (0.0, 0.0, 1.0));
-        OV.TransformMesh (mesh, transformation);
-        assert (OV.CoordIsEqual3D (mesh.GetVertex (0), new OV.Coord3D (0.0, 0.0, 1.0)));
-        assert (OV.CoordIsEqual3D (mesh.GetVertex (1), new OV.Coord3D (0.0, 0.0, 3.0)));
-        assert (OV.CoordIsEqual3D (mesh.GetVertex (2), new OV.Coord3D (0.0, 1.0, 3.0)));
-        assert (OV.CoordIsEqual3D (mesh.GetNormal (0), new OV.Coord3D (-1.0, 0.0, 0.0)));
+        let rotation = QuaternionFromAxisAngle (new Coord3D (0.0, 1.0, 0.0), -Math.PI / 2.0);
+        let transformation = new Transformation ();
+        transformation.AppendMatrix (new Matrix ().CreateScale (2.0, 1.0, 1.0));
+        transformation.AppendMatrix (new Matrix ().CreateRotation (rotation.x, rotation.y, rotation.z, rotation.w));
+        transformation.AppendMatrix (new Matrix ().CreateTranslation (0.0, 0.0, 1.0));
+        TransformMesh (mesh, transformation);
+        assert (CoordIsEqual3D (mesh.GetVertex (0), new Coord3D (0.0, 0.0, 1.0)));
+        assert (CoordIsEqual3D (mesh.GetVertex (1), new Coord3D (0.0, 0.0, 3.0)));
+        assert (CoordIsEqual3D (mesh.GetVertex (2), new Coord3D (0.0, 1.0, 3.0)));
+        assert (CoordIsEqual3D (mesh.GetNormal (0), new Coord3D (-1.0, 0.0, 0.0)));
     });
 });

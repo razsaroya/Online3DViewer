@@ -1,17 +1,19 @@
 var assert = require ('assert');
+const {NextPowerOfTwo} = require("../../source/import/importerutils");
+const {IsPowerOfTwo} = require("../../source/import/importerutils");
 
 describe ('Power of Two', function () {
     it ('IsPowerOfTwo', function () {
-        assert (OV.IsPowerOfTwo (1));
-        assert (OV.IsPowerOfTwo (2));
-        assert (!OV.IsPowerOfTwo (3));
+        assert (IsPowerOfTwo (1));
+        assert (IsPowerOfTwo (2));
+        assert (!IsPowerOfTwo (3));
         for (let i = 4; i <= 1024; i *= 2) {
-            assert (OV.IsPowerOfTwo (i));
-            assert (!OV.IsPowerOfTwo (i + 1));
-            assert (!OV.IsPowerOfTwo (i - 1));
-            assert.strictEqual (OV.NextPowerOfTwo (i), i);
-            assert.strictEqual (OV.NextPowerOfTwo (i - 1), i);
-            assert.strictEqual (OV.NextPowerOfTwo (i + 1), i * 2);
+            assert (IsPowerOfTwo (i));
+            assert (!IsPowerOfTwo (i + 1));
+            assert (!IsPowerOfTwo (i - 1));
+            assert.strictEqual (NextPowerOfTwo (i), i);
+            assert.strictEqual (NextPowerOfTwo (i - 1), i);
+            assert.strictEqual (NextPowerOfTwo (i + 1), i * 2);
         }
     });
 });

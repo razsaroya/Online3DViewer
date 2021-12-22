@@ -1,55 +1,69 @@
 var assert = require ('assert');
+const {CheckModel} = require("../../source/model/modelfinalization");
+const {ImporterGltf} = require("../../source/import/importergltf");
+const {ImporterPly} = require("../../source/import/importerply");
+const {ImporterStl} = require("../../source/import/importerstl");
+const {FileFormat} = require("../../source/io/fileutils");
+const {Exporter} = require("../../source/export/exporter");
+const {FinalizeModel} = require("../../source/model/modelfinalization");
+const {Triangle} = require("../../source/model/triangle");
+const {Coord3D} = require("../../source/geometry/coord3d");
+const {Mesh} = require("../../source/model/mesh");
+const {TextureMap} = require("../../source/model/material");
+const {MaterialType, Color} = require("../../source/model/material");
+const {Material} = require("../../source/model/material");
+const {Model} = require("../../source/model/model");
 
 function CreateTestModel ()
 {
-    let model = new OV.Model ();
+    let model = new Model ();
 
-    let material1 = new OV.Material (OV.MaterialType.Phong);
+    let material1 = new Material (MaterialType.Phong);
     material1.name = 'TestMaterial1';
-    material1.ambient = new OV.Color (0, 0, 0);
-    material1.color = new OV.Color (255, 0, 0);
-    material1.specular = new OV.Color (51, 51, 51);
-    material1.diffuseMap = new OV.TextureMap ();
+    material1.ambient = new Color (0, 0, 0);
+    material1.color = new Color (255, 0, 0);
+    material1.specular = new Color (51, 51, 51);
+    material1.diffuseMap = new TextureMap ();
     material1.diffuseMap.name = 'textures/texture1.png';
     material1.diffuseMap.url = 'texture1_url';
     material1.diffuseMap.buffer = new ArrayBuffer (1);
-    material1.specularMap = new OV.TextureMap ();
+    material1.specularMap = new TextureMap ();
     material1.specularMap.name = 'textures/texture2.png';
     material1.specularMap.url = 'texture2_url';
     material1.specularMap.buffer = new ArrayBuffer (2);
-    material1.bumpMap = new OV.TextureMap ();
+    material1.bumpMap = new TextureMap ();
     material1.bumpMap.name = 'textures/texture3.png';
     material1.bumpMap.url = 'texture3_url';
     material1.bumpMap.buffer = new ArrayBuffer (3);
     model.AddMaterial (material1);
 
-    let material2 = new OV.Material (OV.MaterialType.Phong);
+    let material2 = new Material (MaterialType.Phong);
     material2.name = 'TestMaterial2';
-    material2.ambient = new OV.Color (0, 0, 0);
-    material2.color = new OV.Color (0, 255, 0);
-    material2.specular = new OV.Color (51, 51, 51);
+    material2.ambient = new Color (0, 0, 0);
+    material2.color = new Color (0, 255, 0);
+    material2.specular = new Color (51, 51, 51);
     model.AddMaterial (material2);
 
-    let mesh1 = new OV.Mesh ();
+    let mesh1 = new Mesh ();
     mesh1.SetName ('TestMesh1');
-    mesh1.AddVertex (new OV.Coord3D (0.0, 0.0, 1.0));
-    mesh1.AddVertex (new OV.Coord3D (1.0, 0.0, 1.0));
-    mesh1.AddVertex (new OV.Coord3D (0.0, 1.0, 1.0));
-    let triangle1 = new OV.Triangle (0, 1, 2);
+    mesh1.AddVertex (new Coord3D (0.0, 0.0, 1.0));
+    mesh1.AddVertex (new Coord3D (1.0, 0.0, 1.0));
+    mesh1.AddVertex (new Coord3D (0.0, 1.0, 1.0));
+    let triangle1 = new Triangle (0, 1, 2);
     triangle1.mat = 0;
     mesh1.AddTriangle (triangle1);
     model.AddMeshToRootNode (mesh1);
 
-    let mesh2 = new OV.Mesh ();
+    let mesh2 = new Mesh ();
     mesh2.SetName ('TestMesh2');
-    mesh2.AddVertex (new OV.Coord3D (0.0, 0.0, 0.0));
-    mesh2.AddVertex (new OV.Coord3D (1.0, 0.0, 0.0));
-    mesh2.AddVertex (new OV.Coord3D (0.0, 1.0, 0.0));
-    mesh2.AddVertex (new OV.Coord3D (-1.0, 0.0, 0.0));
-    mesh2.AddVertex (new OV.Coord3D (0.0, 0.0, 1.0));
-    let triangle2 = new OV.Triangle (0, 1, 2);
-    let triangle3 = new OV.Triangle (0, 2, 3);
-    let triangle4 = new OV.Triangle (0, 4, 2);
+    mesh2.AddVertex (new Coord3D (0.0, 0.0, 0.0));
+    mesh2.AddVertex (new Coord3D (1.0, 0.0, 0.0));
+    mesh2.AddVertex (new Coord3D (0.0, 1.0, 0.0));
+    mesh2.AddVertex (new Coord3D (-1.0, 0.0, 0.0));
+    mesh2.AddVertex (new Coord3D (0.0, 0.0, 1.0));
+    let triangle2 = new Triangle (0, 1, 2);
+    let triangle3 = new Triangle (0, 2, 3);
+    let triangle4 = new Triangle (0, 4, 2);
     triangle2.mat = 0;
     triangle3.mat = 1;
     triangle4.mat = 1;
@@ -58,13 +72,13 @@ function CreateTestModel ()
     mesh2.AddTriangle (triangle4);
     model.AddMeshToRootNode (mesh2);
 
-    OV.FinalizeModel (model, null);
+    FinalizeModel (model, null);
     return model;
 }
 
 function Export (model, format, extension, onReady)
 {
-    let exporter = new OV.Exporter ();
+    let exporter = new Exporter ();
     exporter.Export (model, format, extension, {
         onSuccess : function (files) {
             onReady (files);
@@ -75,8 +89,8 @@ function Export (model, format, extension, onReady)
 describe ('Exporter', function () {
     it ('Exporter Error', function (done) {
         let model = CreateTestModel ();
-        let exporter = new OV.Exporter ();
-        exporter.Export (model, OV.FileFormat.Text, 'ext', {
+        let exporter = new Exporter ();
+        exporter.Export (model, FileFormat.Text, 'ext', {
             onError : function () {
                 done ();
             }
@@ -85,7 +99,7 @@ describe ('Exporter', function () {
 
     it ('Obj Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Text, 'obj', function (result) {
+        Export (model, FileFormat.Text, 'obj', function (result) {
             assert.strictEqual (result.length, 5);
 
             let mtlFile = result[0];
@@ -157,7 +171,7 @@ describe ('Exporter', function () {
 
     it ('Stl Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Text, 'stl', function (result) {
+        Export (model, FileFormat.Text, 'stl', function (result) {
             assert.strictEqual (result.length, 1);
 
             let stlFile = result[0];
@@ -203,7 +217,7 @@ describe ('Exporter', function () {
 
     it ('Stl Binary Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Binary, 'stl', function (result) {
+        Export (model, FileFormat.Binary, 'stl', function (result) {
             assert.strictEqual (result.length, 1);
 
             let stlFile = result[0];
@@ -211,10 +225,10 @@ describe ('Exporter', function () {
             assert.strictEqual (stlFile.GetBufferContent ().byteLength, 284);
 
             let contentBuffer = stlFile.GetBufferContent ();
-            let importer = new OV.ImporterStl ();
+            let importer = new ImporterStl ();
             importer.Import (stlFile.GetName (), 'stl', contentBuffer, {
                 getDefaultMaterial () {
-                    return new OV.Material (OV.MaterialType.Phong);
+                    return new Material (MaterialType.Phong);
                 },
                 onSuccess () {
                     let importedModel = importer.GetModel ();
@@ -230,7 +244,7 @@ describe ('Exporter', function () {
 
     it ('Off Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Text, 'off', function (result) {
+        Export (model, FileFormat.Text, 'off', function (result) {
             assert.strictEqual (result.length, 1);
 
             let offFile = result[0];
@@ -260,7 +274,7 @@ describe ('Exporter', function () {
 
     it ('Ply Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Text, 'ply', function (result) {
+        Export (model, FileFormat.Text, 'ply', function (result) {
             assert.strictEqual (result.length, 1);
 
             let plyFile = result[0];
@@ -297,7 +311,7 @@ describe ('Exporter', function () {
 
     it ('Ply Binary Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Binary, 'ply', function (result) {
+        Export (model, FileFormat.Binary, 'ply', function (result) {
             assert.strictEqual (result.length, 1);
 
             let plyFile = result[0];
@@ -305,10 +319,10 @@ describe ('Exporter', function () {
             assert.strictEqual (plyFile.GetBufferContent ().byteLength, 315);
 
             let contentBuffer = plyFile.GetBufferContent ();
-            let importer = new OV.ImporterPly ();
+            let importer = new ImporterPly ();
             importer.Import (plyFile.GetName (), 'ply', contentBuffer, {
                 getDefaultMaterial () {
-                    return new OV.Material (OV.MaterialType.Phong);
+                    return new Material (MaterialType.Phong);
                 },
                 onSuccess () {
                     let importedModel = importer.GetModel ();
@@ -322,7 +336,7 @@ describe ('Exporter', function () {
 
     it ('Gltf Ascii Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Text, 'gltf', function (result) {
+        Export (model, FileFormat.Text, 'gltf', function (result) {
             assert.strictEqual (result.length, 3);
 
             let gltfFile = result[0];
@@ -335,10 +349,10 @@ describe ('Exporter', function () {
             assert.strictEqual (textureFile.GetBufferContent ().byteLength, 1);
 
             let contentBuffer = gltfFile.GetBufferContent ();
-            let importer = new OV.ImporterGltf ();
+            let importer = new ImporterGltf ();
             importer.Import (gltfFile.GetName (), 'gltf', contentBuffer, {
                 getDefaultMaterial () {
-                    return new OV.Material (OV.MaterialType.Phong);
+                    return new Material (MaterialType.Phong);
                 },
                 getFileBuffer (filePath) {
                     if (filePath == 'model.bin') {
@@ -351,7 +365,7 @@ describe ('Exporter', function () {
                 },
                 onSuccess () {
                     let importedModel = importer.GetModel ();
-                    assert (OV.CheckModel (importedModel));
+                    assert (CheckModel (importedModel));
                     assert.strictEqual (importedModel.MaterialCount (), 2);
                     assert.strictEqual (importedModel.MeshCount (), 2);
                     assert.strictEqual (importedModel.GetMesh (0).GetName (), 'TestMesh1');
@@ -366,17 +380,17 @@ describe ('Exporter', function () {
 
     it ('Gltf Binary Export', function (done) {
         let model = CreateTestModel ();
-        Export (model, OV.FileFormat.Binary, 'glb', function (result) {
+        Export (model, FileFormat.Binary, 'glb', function (result) {
             assert.strictEqual (result.length, 1);
 
             let glbFile = result[0];
             assert.strictEqual (glbFile.GetName (), 'model.glb');
 
             let contentBuffer = glbFile.GetBufferContent ();
-            let importer = new OV.ImporterGltf ();
+            let importer = new ImporterGltf ();
             importer.Import (glbFile.GetName (), 'glb', contentBuffer, {
                 getDefaultMaterial () {
-                    return new OV.Material (OV.MaterialType.Phong);
+                    return new Material (MaterialType.Phong);
                 },
                 getFileBuffer (filePath) {
                     return null;
@@ -386,7 +400,7 @@ describe ('Exporter', function () {
                 },
                 onSuccess () {
                     let importedModel = importer.GetModel ();
-                    assert (OV.CheckModel (importedModel));
+                    assert (CheckModel (importedModel));
                     assert.strictEqual (importedModel.MaterialCount (), 2);
                     assert.strictEqual (importedModel.MeshCount (), 2);
                     assert.strictEqual (importedModel.GetMesh (0).GetName (), 'TestMesh1');

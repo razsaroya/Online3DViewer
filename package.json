@@ -4,6 +4,7 @@
 	"version": "0.8.0",
 	"repository": "github:kovacsv/Online3DViewer",
 	"license": "MIT",
+	"type": "module",
 	"devDependencies": {
 		"clean-css-cli": "^5.3.3",
 		"eslint": "^7.30.0",
@@ -13,7 +14,8 @@
 		"mocha": "^8.3.2",
 		"oslllo-svg-fixer": "^1.4.0",
 		"rewire": "^5.0.0",
-		"svgo": "^2.3.1"
+		"svgo": "^2.3.1",
+		"webpack-cli": "^4.9.1"
 	},
 	"scripts": {
 		"start": "http-server",
@@ -29,7 +31,8 @@
 		"fflate": "0.7.1",
 		"rhino3dm": "7.11.1",
 		"three": "0.135.0",
-		"web-ifc": "0.0.29"
+		"web-ifc": "0.0.29",
+		"webpack": "^5.65.0"
 	},
 	"eslintConfig": {
 		"env": {
@@ -38,7 +41,6 @@
 		},
 		"extends": "eslint:recommended",
 		"globals": {
-			"OV": "writable",
 			"$": "readonly",
 			"fflate": "readonly",
 			"Pickr": "readonly",

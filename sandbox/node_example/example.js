@@ -1,8 +1,10 @@
 var fs = require ('fs');
 
 require ('../../build/final/website/o3dv/o3dv.min.js');
+const {ImportSettings} = require("../../source/import/importer");
+const {Importer} = require("../../source/import/importer");
 
-let importer = new OV.Importer ();
+let importer = new Importer ();
 
 let FileObject = function (name)
 {
@@ -53,7 +55,7 @@ global.FileReader = class
     }
 };
 
-let settings = new OV.ImportSettings ();
+let settings = new ImportSettings ();
 importer.ImportFilesFromFileObjects (files, settings, {
     onFilesLoaded : function () {
 

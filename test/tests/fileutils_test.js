@@ -1,9 +1,12 @@
 var assert = require ('assert');
+const {GetFileName} = require("../../source/io/fileutils");
+const {GetFileExtension} = require("../../source/io/fileutils");
+const {ReadLines} = require("../../source/import/importerutils");
 
 function GetLines (str)
 {
     var lines = [];
-    OV.ReadLines (str, function (line) {
+    ReadLines (str, function (line) {
         lines.push (line);
     });
     return lines;
@@ -11,21 +14,21 @@ function GetLines (str)
 
 describe ('File Utils', function () {
     it ('Get File Extension', function () {
-        assert.strictEqual (OV.GetFileExtension ('file'), '');
-        assert.strictEqual (OV.GetFileExtension ('file.obj'), 'obj');
-        assert.strictEqual (OV.GetFileExtension ('file.OBJ'), 'obj');
+        assert.strictEqual (GetFileExtension ('file'), '');
+        assert.strictEqual (GetFileExtension ('file.obj'), 'obj');
+        assert.strictEqual (GetFileExtension ('file.OBJ'), 'obj');
     });    
     
     it ('Get File Name', function () {
-        assert.strictEqual (OV.GetFileName ('file'), 'file');
-        assert.strictEqual (OV.GetFileName ('file.obj'), 'file.obj');
-        assert.strictEqual (OV.GetFileName ('file.OBJ'), 'file.OBJ');
-        assert.strictEqual (OV.GetFileName ('folder/file'), 'file');
-        assert.strictEqual (OV.GetFileName ('folder/file.obj'), 'file.obj');
-        assert.strictEqual (OV.GetFileName ('folder/file.OBJ'), 'file.OBJ');
-        assert.strictEqual (OV.GetFileName ('folder\\file'), 'file');
-        assert.strictEqual (OV.GetFileName ('folder\\file.obj'), 'file.obj');
-        assert.strictEqual (OV.GetFileName ('folder\\file.OBJ'), 'file.OBJ');
+        assert.strictEqual (GetFileName ('file'), 'file');
+        assert.strictEqual (GetFileName ('file.obj'), 'file.obj');
+        assert.strictEqual (GetFileName ('file.OBJ'), 'file.OBJ');
+        assert.strictEqual (GetFileName ('folder/file'), 'file');
+        assert.strictEqual (GetFileName ('folder/file.obj'), 'file.obj');
+        assert.strictEqual (GetFileName ('folder/file.OBJ'), 'file.OBJ');
+        assert.strictEqual (GetFileName ('folder\\file'), 'file');
+        assert.strictEqual (GetFileName ('folder\\file.obj'), 'file.obj');
+        assert.strictEqual (GetFileName ('folder\\file.OBJ'), 'file.OBJ');
     });    
 
     it ('Read Lines', function () {

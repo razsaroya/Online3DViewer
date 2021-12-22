@@ -1,11 +1,15 @@
 var assert = require ('assert');
+const {Model} = require("../../source/model/model");
+const {PropertyType} = require("../../source/model/property");
+const {Property} = require("../../source/model/property");
+const {PropertyGroup} = require("../../source/model/property");
 
 describe ('Property Test', function () {
     it ('Property Group', function() {
-        let group = new OV.PropertyGroup ('Group');
-        group.AddProperty (new OV.Property (OV.PropertyType.Text, 'name 01', 'value 01'));
-        group.AddProperty (new OV.Property (OV.PropertyType.Integer, 'name 02', 2));
-        group.AddProperty (new OV.Property (OV.PropertyType.Number, 'name 03', 3.5));
+        let group = new PropertyGroup ('Group');
+        group.AddProperty (new Property (PropertyType.Text, 'name 01', 'value 01'));
+        group.AddProperty (new Property (PropertyType.Integer, 'name 02', 2));
+        group.AddProperty (new Property (PropertyType.Number, 'name 03', 3.5));
         assert.strictEqual (group.PropertyCount (), 3);
         assert.strictEqual (group.GetProperty (0).name, 'name 01');
         assert.strictEqual (group.GetProperty (0).value, 'value 01');
@@ -16,13 +20,13 @@ describe ('Property Test', function () {
     });
 
     it ('Model Properties', function() {
-        let model = new OV.Model ();
-        let group1 = new OV.PropertyGroup ('Group 01');
-        let group2 = new OV.PropertyGroup ('Group 02');
-        let group3 = new OV.PropertyGroup ('Group 03');
-        group1.AddProperty (new OV.Property (OV.PropertyType.Text, 'name 01', 'value 01'));
-        group2.AddProperty (new OV.Property (OV.PropertyType.Integer, 'name 02', 2));
-        group3.AddProperty (new OV.Property (OV.PropertyType.Number, 'name 03', 3.5));
+        let model = new Model ();
+        let group1 = new PropertyGroup ('Group 01');
+        let group2 = new PropertyGroup ('Group 02');
+        let group3 = new PropertyGroup ('Group 03');
+        group1.AddProperty (new Property (PropertyType.Text, 'name 01', 'value 01'));
+        group2.AddProperty (new Property (PropertyType.Integer, 'name 02', 2));
+        group3.AddProperty (new Property (PropertyType.Number, 'name 03', 3.5));
         model.AddPropertyGroup (group1);
         model.AddPropertyGroup (group2);
         model.AddPropertyGroup (group3);

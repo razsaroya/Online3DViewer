@@ -1,5 +1,19 @@
+const {FinalizeModel} = require("../../source/model/modelfinalization");
+
 var fs = require ('fs');
 var path = require ('path');
+const {TransformMesh} = require("../../source/model/modelutils");
+const {Transformation} = require("../../source/geometry/transformation");
+const {GenerateCuboid} = require("../../source/model/generator");
+const {Model} = require("../../source/model/model");
+const {GetBoundingBox} = require("../../source/model/modelutils");
+const Matrix = require("../../source/geometry/matrix");
+const {Material, MaterialType} = require("../../source/model/material");
+const {Mesh} = require("../../source/model/mesh");
+const {Coord3D} = require("../../source/geometry/coord3d");
+const {Triangle} = require("../../source/model/triangle");
+const {Node} = require("../../source/model/node");
+const {QuaternionFromAxisAngle} = require("../../source/geometry/quaternion");
 
 module.exports =
 {
@@ -140,7 +154,7 @@ module.exports =
         }
 
         model.EnumerateTransformedMeshes ((mesh) => {
-            let boundingBox = OV.GetBoundingBox (mesh);
+            let boundingBox = GetBoundingBox (mesh);
             let meshObj = {
                 name : mesh.GetName (),
                 vertexCount : mesh.VertexCount (),
@@ -160,98 +174,98 @@ module.exports =
 
     GetTwoCubesConnectingInOneVertexModel : function ()
     {
-        let model = new OV.Model ();
+        let model = new Model ();
 
-        let cube1 = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let cube1 = GenerateCuboid (null, 1.0, 1.0, 1.0);
         model.AddMeshToRootNode (cube1);
 
-        let cube2 = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
-        let matrix = new OV.Matrix ().CreateTranslation (1.0, 1.0, 1.0);
-        OV.TransformMesh (cube2, new OV.Transformation (matrix));
+        let cube2 = GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let matrix = new Matrix ().CreateTranslation (1.0, 1.0, 1.0);
+        TransformMesh (cube2, new Transformation (matrix));
         model.AddMeshToRootNode (cube2);
 
-        OV.FinalizeModel (model, function () { return new OV.Material (OV.MaterialType.Phong) });
+        FinalizeModel (model, function () { return new Material (MaterialType.Phong) });
         return model;
     },
 
     GetTwoCubesConnectingInOneEdgeModel : function ()
     {
-        let model = new OV.Model ();
+        let model = new Model ();
 
-        let cube1 = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let cube1 = GenerateCuboid (null, 1.0, 1.0, 1.0);
         model.AddMeshToRootNode (cube1);
 
-        let cube2 = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
-        let matrix = new OV.Matrix ().CreateTranslation (1.0, 0.0, 1.0);
-        OV.TransformMesh (cube2, new OV.Transformation (matrix))
+        let cube2 = GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let matrix = new Matrix ().CreateTranslation (1.0, 0.0, 1.0);
+        TransformMesh (cube2, new Transformation (matrix))
         model.AddMeshToRootNode (cube2);
 
-        OV.FinalizeModel (model, function () { return new OV.Material (OV.MaterialType.Phong) });
+        FinalizeModel (model, function () { return new Material (MaterialType.Phong) });
         return model;
     },
 
     GetTwoCubesConnectingInOneFaceModel ()
     {
-        let model = new OV.Model ();
+        let model = new Model ();
 
-        let cube1 = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let cube1 = GenerateCuboid (null, 1.0, 1.0, 1.0);
         model.AddMeshToRootNode (cube1);
 
-        let cube2 = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
-        let matrix = new OV.Matrix ().CreateTranslation (1.0, 0.0, 0.0);
-        OV.TransformMesh (cube2, new OV.Transformation (matrix));
+        let cube2 = GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let matrix = new Matrix ().CreateTranslation (1.0, 0.0, 0.0);
+        TransformMesh (cube2, new Transformation (matrix));
         model.AddMeshToRootNode (cube2);
 
-        OV.FinalizeModel (model, function () { return new OV.Material (OV.MaterialType.Phong) });
+        FinalizeModel (model, function () { return new Material (MaterialType.Phong) });
         return model;
     },
 
     GetCubeWithOneMissingFaceMesh ()
     {
-        var cube = new OV.Mesh ();
-        cube.AddVertex (new OV.Coord3D (0.0, 0.0, 0.0));
-        cube.AddVertex (new OV.Coord3D (1.0, 0.0, 0.0));
-        cube.AddVertex (new OV.Coord3D (1.0, 1.0, 0.0));
-        cube.AddVertex (new OV.Coord3D (0.0, 1.0, 0.0));
-        cube.AddVertex (new OV.Coord3D (0.0, 0.0, 1.0));
-        cube.AddVertex (new OV.Coord3D (1.0, 0.0, 1.0));
-        cube.AddVertex (new OV.Coord3D (1.0, 1.0, 1.0));
-        cube.AddVertex (new OV.Coord3D (0.0, 1.0, 1.0));
-        cube.AddTriangle (new OV.Triangle (0, 1, 5));
-        cube.AddTriangle (new OV.Triangle (0, 5, 4));
-        cube.AddTriangle (new OV.Triangle (1, 2, 6));
-        cube.AddTriangle (new OV.Triangle (1, 6, 5));
-        cube.AddTriangle (new OV.Triangle (2, 3, 7));
-        cube.AddTriangle (new OV.Triangle (2, 7, 6));
-        cube.AddTriangle (new OV.Triangle (3, 0, 4));
-        cube.AddTriangle (new OV.Triangle (3, 4, 7));
-        cube.AddTriangle (new OV.Triangle (0, 3, 2));
-        cube.AddTriangle (new OV.Triangle (0, 2, 1));
+        var cube = new Mesh ();
+        cube.AddVertex (new Coord3D (0.0, 0.0, 0.0));
+        cube.AddVertex (new Coord3D (1.0, 0.0, 0.0));
+        cube.AddVertex (new Coord3D (1.0, 1.0, 0.0));
+        cube.AddVertex (new Coord3D (0.0, 1.0, 0.0));
+        cube.AddVertex (new Coord3D (0.0, 0.0, 1.0));
+        cube.AddVertex (new Coord3D (1.0, 0.0, 1.0));
+        cube.AddVertex (new Coord3D (1.0, 1.0, 1.0));
+        cube.AddVertex (new Coord3D (0.0, 1.0, 1.0));
+        cube.AddTriangle (new Triangle (0, 1, 5));
+        cube.AddTriangle (new Triangle (0, 5, 4));
+        cube.AddTriangle (new Triangle (1, 2, 6));
+        cube.AddTriangle (new Triangle (1, 6, 5));
+        cube.AddTriangle (new Triangle (2, 3, 7));
+        cube.AddTriangle (new Triangle (2, 7, 6));
+        cube.AddTriangle (new Triangle (3, 0, 4));
+        cube.AddTriangle (new Triangle (3, 4, 7));
+        cube.AddTriangle (new Triangle (0, 3, 2));
+        cube.AddTriangle (new Triangle (0, 2, 1));
         return cube;
     },
 
     GetTetrahedronMesh ()
     {
-        var tetrahedron = new OV.Mesh ();
+        var tetrahedron = new Mesh ();
 
         let a = 1.0;
-        tetrahedron.AddVertex (new OV.Coord3D (+a, +a, +a));
-        tetrahedron.AddVertex (new OV.Coord3D (-a, -a, +a));
-        tetrahedron.AddVertex (new OV.Coord3D (-a, +a, -a));
-        tetrahedron.AddVertex (new OV.Coord3D (+a, -a, -a));
-        tetrahedron.AddTriangle (new OV.Triangle (0, 1, 3));
-        tetrahedron.AddTriangle (new OV.Triangle (0, 2, 1));
-        tetrahedron.AddTriangle (new OV.Triangle (0, 3, 2));
-        tetrahedron.AddTriangle (new OV.Triangle (1, 2, 3));
+        tetrahedron.AddVertex (new Coord3D (+a, +a, +a));
+        tetrahedron.AddVertex (new Coord3D (-a, -a, +a));
+        tetrahedron.AddVertex (new Coord3D (-a, +a, -a));
+        tetrahedron.AddVertex (new Coord3D (+a, -a, -a));
+        tetrahedron.AddTriangle (new Triangle (0, 1, 3));
+        tetrahedron.AddTriangle (new Triangle (0, 2, 1));
+        tetrahedron.AddTriangle (new Triangle (0, 3, 2));
+        tetrahedron.AddTriangle (new Triangle (1, 2, 3));
 
         return tetrahedron;
     },
 
     GetModelWithOneMesh (mesh)
     {
-        var model = new OV.Model ();
+        var model = new Model ();
         model.AddMeshToRootNode (mesh);
-        OV.FinalizeModel (model, function () { return new OV.Material (OV.MaterialType.Phong) });
+        FinalizeModel (model, function () { return new Material (MaterialType.Phong) });
         return model;
     },
 
@@ -273,19 +287,19 @@ module.exports =
                 Mesh 2
         */
 
-        let model = new OV.Model ();
+        let model = new Model ();
         let root = model.GetRootNode ();
 
-        let node1 = new OV.Node ();
+        let node1 = new Node ();
         node1.SetName ('Node 1');
 
-        let node2 = new OV.Node ();
+        let node2 = new Node ();
         node2.SetName ('Node 2');
 
-        let node3 = new OV.Node ();
+        let node3 = new Node ();
         node3.SetName ('Node 3');
 
-        let node4 = new OV.Node ();
+        let node4 = new Node ();
         node4.SetName ('Node 4');
 
         root.AddChildNode (node1);
@@ -293,25 +307,25 @@ module.exports =
         node1.AddChildNode (node3);
         node1.AddChildNode (node4);
 
-        let mesh1 = new OV.Mesh ();
+        let mesh1 = new Mesh ();
         mesh1.SetName ('Mesh 1');
 
-        let mesh2 = new OV.Mesh ();
+        let mesh2 = new Mesh ();
         mesh2.SetName ('Mesh 2');
 
-        let mesh3 = new OV.Mesh ();
+        let mesh3 = new Mesh ();
         mesh3.SetName ('Mesh 3');
 
-        let mesh4 = new OV.Mesh ();
+        let mesh4 = new Mesh ();
         mesh4.SetName ('Mesh 4');
 
-        let mesh5 = new OV.Mesh ();
+        let mesh5 = new Mesh ();
         mesh5.SetName ('Mesh 5');
 
-        let mesh6 = new OV.Mesh ();
+        let mesh6 = new Mesh ();
         mesh6.SetName ('Mesh 6');
 
-        let mesh7 = new OV.Mesh ();
+        let mesh7 = new Mesh ();
         mesh7.SetName ('Mesh 7');
 
         let mesh1Ind = model.AddMesh (mesh1);
@@ -346,36 +360,36 @@ module.exports =
                 Cube
         */
 
-        let model = new OV.Model ();
+        let model = new Model ();
 
-        let mesh = OV.GenerateCuboid (null, 1.0, 1.0, 1.0);
+        let mesh = GenerateCuboid (null, 1.0, 1.0, 1.0);
         mesh.SetName ('Cube');
         let meshIndex = model.AddMesh (mesh);
 
         let root = model.GetRootNode ();
         root.AddMeshIndex (0);
 
-        let translatedNode = new OV.Node ();
+        let translatedNode = new Node ();
         translatedNode.SetName ('Translated');
-        translatedNode.SetTransformation (new OV.Transformation (new OV.Matrix ().CreateTranslation (2.0, 0.0, 0.0)));
+        translatedNode.SetTransformation (new Transformation (new Matrix ().CreateTranslation (2.0, 0.0, 0.0)));
         translatedNode.AddMeshIndex (0);
 
-        let rotatedNode = new OV.Node ();
+        let rotatedNode = new Node ();
         rotatedNode.SetName ('Rotated');
 
-        let rotation = OV.QuaternionFromAxisAngle (new OV.Coord3D (0.0, 0.0, 1.0), Math.PI / 2.0);
-        rotatedNode.SetTransformation (new OV.Transformation (new OV.Matrix ().CreateRotation (rotation.x, rotation.y, rotation.z, rotation.w)));
+        let rotation = QuaternionFromAxisAngle (new Coord3D (0.0, 0.0, 1.0), Math.PI / 2.0);
+        rotatedNode.SetTransformation (new Transformation (new Matrix ().CreateRotation (rotation.x, rotation.y, rotation.z, rotation.w)));
 
-        let translatedRotatedNode = new OV.Node ();
+        let translatedRotatedNode = new Node ();
         translatedRotatedNode.SetName ('Translated and Rotated');
-        translatedRotatedNode.SetTransformation (new OV.Transformation (new OV.Matrix ().CreateTranslation (2.0, 0.0, 0.0)));
+        translatedRotatedNode.SetTransformation (new Transformation (new Matrix ().CreateTranslation (2.0, 0.0, 0.0)));
         translatedRotatedNode.AddMeshIndex (0);
 
         root.AddChildNode (translatedNode);
         root.AddChildNode (rotatedNode);
         rotatedNode.AddChildNode (translatedRotatedNode);
 
-        OV.FinalizeModel (model, function () { return new OV.Material (OV.MaterialType.Phong) });
+        FinalizeModel (model, function () { return new Material (MaterialType.Phong) });
         return model;
     }
 }

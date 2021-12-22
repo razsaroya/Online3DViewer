@@ -1,9 +1,11 @@
 var assert = require ('assert');
+const {RunTasksBatch} = require("../../source/core/taskrunner");
+const {RunTasks} = require("../../source/core/taskrunner");
 
 describe ('Task Runner', function () {
     it ('Run task zero times', function (done) {
         var numbers = [];
-        OV.RunTasks (0, {
+        RunTasks (0, {
             runTask : function (index, ready) {
                 numbers.push (index);
                 ready ();
@@ -17,7 +19,7 @@ describe ('Task Runner', function () {
 
     it ('Run task three times', function (done) {
         var numbers = [];
-        OV.RunTasks (3, {
+        RunTasks (3, {
             runTask : function (index, ready) {
                 numbers.push (index);
                 ready ();
@@ -31,7 +33,7 @@ describe ('Task Runner', function () {
 
     it ('Run task batched', function (done) {
         var indices = [];
-        OV.RunTasksBatch (10, 3, {
+        RunTasksBatch (10, 3, {
             runTask : function (firstIndex, lastIndex, ready) {
                 indices.push ([firstIndex, lastIndex]);
                 ready ();
@@ -45,7 +47,7 @@ describe ('Task Runner', function () {
 
     it ('Run task batched zero times', function (done) {
         var indices = [];
-        OV.RunTasksBatch (0, 3, {
+        RunTasksBatch (0, 3, {
             runTask : function (firstIndex, lastIndex, ready) {
                 indices.push ([firstIndex, lastIndex]);
                 ready ();

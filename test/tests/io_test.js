@@ -1,10 +1,16 @@
 var assert = require ('assert');
 var testUtils = require ('../utils/testutils.js');
+const {GetFileExtension} = require("../../source/io/fileutils");
+const {GetFileName} = require("../../source/io/fileutils");
+const {ArrayBufferToUtf8String} = require("../../source/io/bufferutils");
+const {Utf8StringToArrayBuffer} = require("../../source/io/bufferutils");
+const {BinaryWriter} = require("../../source/io/binarywriter");
+const {BinaryReader} = require("../../source/io/binaryreader");
 
 describe ('IO Test', function () {
     it ('Binary Reader', function () {
         let buffer = testUtils.GetArrayBufferFileContent ('bin', 'binary_content.bin');
-        let reader = new OV.BinaryReader (buffer, true);
+        let reader = new BinaryReader (buffer, true);
         
         assert.strictEqual (reader.GetByteLength (), 166);
         assert.strictEqual (reader.ReadBoolean8 (), true);
@@ -65,7 +71,7 @@ describe ('IO Test', function () {
     });
 
     it ('Binary Writer', function () {
-        let writer = new OV.BinaryWriter (27, true);
+        let writer = new BinaryWriter (27, true);
         writer.WriteBoolean8 (true);
         writer.WriteCharacter8 (1);
         writer.WriteUnsignedCharacter8 (2);
@@ -77,7 +83,7 @@ describe ('IO Test', function () {
         writer.WriteDouble64 (8.5);
         assert (writer.End ());
 
-        let reader = new OV.BinaryReader (writer.GetBuffer (), true);
+        let reader = new BinaryReader (writer.GetBuffer (), true);
         assert.strictEqual (reader.GetByteLength (), 27);
         assert.strictEqual (reader.ReadBoolean8 (), true);
         assert.strictEqual (reader.ReadCharacter8 (), 1);
@@ -92,26 +98,26 @@ describe ('IO Test', function () {
 
     it ('Utf8 Conversion', function () {
         let str = 'example-\u2764-example';
-        let buffer = OV.Utf8StringToArrayBuffer (str);
+        let buffer = Utf8StringToArrayBuffer (str);
         assert.strictEqual (buffer.byteLength, 19);
-        let str2 = OV.ArrayBufferToUtf8String (buffer);
+        let str2 = ArrayBufferToUtf8String (buffer);
         assert.strictEqual (str, str2);
         assert.strictEqual (str.length, str2.length);
     });
 
     it ('File Name', function () {
-        assert.strictEqual (OV.GetFileName ('file.ext'), 'file.ext');
-        assert.strictEqual (OV.GetFileName ('folder1/folder2/file.ext'), 'file.ext');
-        assert.strictEqual (OV.GetFileName ('folder1\\folder2\\file.ext'), 'file.ext');
-        assert.strictEqual (OV.GetFileName ('https://example.com/file.ext'), 'file.ext');
-        assert.strictEqual (OV.GetFileName ('https://example.com/file.ext?param1=param2'), 'file.ext');
+        assert.strictEqual (GetFileName ('file.ext'), 'file.ext');
+        assert.strictEqual (GetFileName ('folder1/folder2/file.ext'), 'file.ext');
+        assert.strictEqual (GetFileName ('folder1\\folder2\\file.ext'), 'file.ext');
+        assert.strictEqual (GetFileName ('https://example.com/file.ext'), 'file.ext');
+        assert.strictEqual (GetFileName ('https://example.com/file.ext?param1=param2'), 'file.ext');
     });
 
     it ('File Extension', function () {
-        assert.strictEqual (OV.GetFileExtension ('file.ext'), 'ext');
-        assert.strictEqual (OV.GetFileExtension ('folder1/folder2/file.ext'), 'ext');
-        assert.strictEqual (OV.GetFileExtension ('folder1\\folder2\\file.ext'), 'ext');
-        assert.strictEqual (OV.GetFileExtension ('https://example.com/file.ext'), 'ext');
-        assert.strictEqual (OV.GetFileExtension ('https://example.com/file.ext?param1=param2'), 'ext');
+        assert.strictEqual (GetFileExtension ('file.ext'), 'ext');
+        assert.strictEqual (GetFileExtension ('folder1/folder2/file.ext'), 'ext');
+        assert.strictEqual (GetFileExtension ('folder1\\folder2\\file.ext'), 'ext');
+        assert.strictEqual (GetFileExtension ('https://example.com/file.ext'), 'ext');
+        assert.strictEqual (GetFileExtension ('https://example.com/file.ext?param1=param2'), 'ext');
     });
 });
