@@ -1,5 +1,5 @@
 import DomUtils from "../../../viewer/domutils.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import {CreateUrlBuilder} from "../../../parameters/parameterlist.js";
 import {ShowMessageDialog} from "./dialogs.js";
 import {FileSource} from "../../../io/fileutils.js";

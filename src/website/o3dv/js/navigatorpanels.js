@@ -1,9 +1,9 @@
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import {CalculatePopupPositionToElementBottomRight} from "./dialogs.js";
 import {Panel} from "./panelset.js";
 import {TreeView, TreeViewButton, TreeViewButtonItem, TreeViewGroupItem, TreeViewSingleItem} from "./treeview.js";
 import DomUtils from "../../../viewer/domutils.js";
-import {MeshItem, NavigatorItemRecurse, NodeItem} from "./navigatoritems.js";
+import {MaterialItem, MeshItem, NavigatorItemRecurse, NodeItem} from "./navigatoritems.js";
 import {NodeType} from "../../../model/node.js";
 import {MeshInstanceId} from "../../../model/meshinstance.js";
 
@@ -308,7 +308,7 @@ export class NavigatorMaterialsPanel extends NavigatorPanel
         const model = importResult.model;
         for (let materialIndex = 0; materialIndex < model.MaterialCount (); materialIndex++) {
             let material = model.GetMaterial (materialIndex);
-            let materialName = GetMaterialName (material.name);
+            let materialName = Utils.GetMaterialName (material.name);
             let materialItem = new MaterialItem (materialName, materialIndex, {
                 onSelected : (materialIndex) => {
                     this.callbacks.onMaterialSelected (materialIndex);
@@ -570,7 +570,7 @@ export class NavigatorMeshesPanel extends NavigatorPanel
         function AddMeshToNodeTree (panel, model, node, meshIndex, parentItem, showTree)
         {
             let mesh = model.GetMesh (meshIndex);
-            let meshName = GetMeshName (mesh.GetName ());
+            let meshName = Utils.GetMeshName (mesh.GetName ());
             let meshInstanceId = new MeshInstanceId (node.GetId (), meshIndex);
             let meshItemIcon = showTree ? 'tree_mesh' : null;
             let meshItem = new MeshItem (meshName, meshItemIcon, meshInstanceId, {

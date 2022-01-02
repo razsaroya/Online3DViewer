@@ -1,7 +1,8 @@
 import {Direction} from "../geometry/geometry.js";
 import {Coord3D, CoordDistance3D, SubCoord3D} from "../geometry/coord3d.js";
-import {Camera} from "./navigation.js";
+import {Camera, Navigation} from "./navigation.js";
 import {ColorToHexString} from "../model/material.js";
+import DomUtils from "./domutils.js";
 
 export let ShadingModelType =
 {
@@ -398,7 +399,7 @@ export class Viewer
 
     Resize (width, height)
     {
-        let innerSize = GetDomElementInnerDimensions (this.canvas, width, height);
+        let innerSize = DomUtils.GetDomElementInnerDimensions (this.canvas, width, height);
         this.ResizeRenderer (innerSize.width, innerSize.height);
     }
 

@@ -1,86 +1,71 @@
 import {ArrayBufferToUtf8String, Utf8StringToArrayBuffer} from "../io/bufferutils.js";
 
-export class ExportedFile
-{
-	constructor (name)
-	{
-		this.name = name;
-		this.content = null;
-	}
-
-	GetName ()
-	{
-		return this.name;
-	}
-
-	SetName (name)
-	{
-		this.name = name;
-	}
-
-	GetTextContent ()
-	{
-		let text = ArrayBufferToUtf8String (this.content);
-		return text;
-	}
-
-	GetBufferContent ()
-	{
-		return this.content;
-	}
-
-	SetTextContent (content)
-	{
-		let buffer = Utf8StringToArrayBuffer (content);
-		this.content = buffer;
-	}
-
-	SetBufferContent (content)
-	{
-		this.content = content;
-	}
-};
-
 export class ExporterBase
 {
-    constructor ()
-    {
+	constructor() {}
 
-    }
+	CanExport(format, extension) {
+		return false;
+	}
 
-    CanExport (format, extension)
-    {
-        return false;
-    }
-    
-	Export (model, format, onFinish)
-	{
+	Export(model, format, onFinish) {
 		let files = [];
-		this.ExportContent (model, format, files, () => {
-			onFinish (files);
+		this.ExportContent(model, format, files, () => {
+			onFinish(files);
 		});
 	}
 
-	ExportContent (model, format, files, onFinish)
-	{
+	ExportContent(model, format, files, onFinish) {
 
 	}
 
-	GetExportedMaterialName (originalName)
-	{
-		return this.GetExportedName (originalName, 'Material');
+	GetExportedMaterialName(originalName) {
+		return this.GetExportedName(originalName, 'Material');
 	}
-	
-	GetExportedMeshName (originalName)
-	{
-		return this.GetExportedName (originalName, 'Mesh');
-	}	
 
-	GetExportedName (originalName, defaultName)
-	{
+	GetExportedMeshName(originalName) {
+		return this.GetExportedName(originalName, 'Mesh');
+	}
+
+	GetExportedName(originalName, defaultName) {
 		if (originalName.length === 0) {
 			return defaultName;
 		}
 		return originalName;
+	}
+};
+
+
+export class ExportedFile
+{
+	constructor(name) {
+		this.name = name;
+		this.content = null;
+	}
+
+	GetName() {
+		return this.name;
+	}
+
+	SetName(name) {
+		this.name = name;
+	}
+
+	GetTextContent() {
+		let text = ArrayBufferToUtf8String(this.content);
+		return text;
+	}
+
+	GetBufferContent() {
+		return this.content;
+	}
+
+	SetTextContent(content) {
+		let buffer = Utf8StringToArrayBuffer(content);
+		this.content = buffer;
+	}
+
+	SetBufferContent(content) {
+		this.content = content;
 	}
 };

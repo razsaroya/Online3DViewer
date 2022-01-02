@@ -1,4 +1,4 @@
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import DomUtils from "../../../viewer/domutils.js";
 import {IsDefined} from "../../../core/core.js";
 

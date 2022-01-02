@@ -1,5 +1,6 @@
 import {ButtonDialog} from "./modal.js";
 import {ReadLines} from "../../../import/importerutils.js";
+import DomUtils from "../../../viewer/domutils.js";
 
 export function ShowOpenUrlDialog  (onOk)
 {

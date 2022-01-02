@@ -2,7 +2,7 @@ import {PanelSet} from "./panelset.js";
 import {DetailsSidebarPanel, SettingsSidebarPanel} from "./sidebarpanels.js";
 import DomUtils from "../../../viewer/domutils.js";
 import {Settings} from "./settings.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 
 export class Sidebar
 {

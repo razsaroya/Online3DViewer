@@ -1,5 +1,5 @@
 import DomUtils from "../../../viewer/domutils.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 
 export class ToolbarButton
 {
@@ -10,7 +10,7 @@ export class ToolbarButton
 
         this.selected = false;
         this.buttonDiv = DomUtils.CreateDiv ('ov_toolbar_button');
-        this.buttonImg = DomUtils.AddSvgIconElement (this.buttonDiv, this.image);
+        this.buttonImg = Utils.AddSvgIconElement (this.buttonDiv, this.image);
         if (onClick !== null) {
             this.buttonDiv.addEventListener ('click', onClick);
         }

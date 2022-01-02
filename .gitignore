@@ -5,3 +5,5 @@ website_script_data.txt
 package-lock.json
 node_modules
 __pycache__
+dist/bundle.js
+dist/bundle.js.map

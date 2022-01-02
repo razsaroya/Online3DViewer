@@ -10,8 +10,8 @@ import {Coord2D} from "../geometry/coord2d.js";
 import {Triangle} from "../model/triangle.js";
 import {ArrayToQuaternion} from "../geometry/quaternion.js";
 import {Transformation} from "../geometry/transformation.js";
-import {Node} from "../model/node.js";
-
+import {Node, NodeType} from "../model/node.js";
+import Matrix from '../geometry/matrix.js';
 
 export let CHUNK3DS =
 {

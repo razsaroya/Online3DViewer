@@ -4,7 +4,6 @@
 	"version": "0.8.0",
 	"repository": "github:kovacsv/Online3DViewer",
 	"license": "MIT",
-	"type": "module",
 	"devDependencies": {
 		"clean-css-cli": "^5.3.3",
 		"eslint": "^7.30.0",

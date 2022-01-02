@@ -7,7 +7,7 @@ import {GetFileName} from "../../../io/fileutils.js";
 import {ColorToHexString, MaterialType, Color} from "../../../model/material.js";
 import {SubCoord3D} from "../../../geometry/coord3d.js";
 import {Theme} from "./settings.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import {RunTaskAsync} from "../../../core/taskrunner.js";
 
 export class SidebarPanel extends Panel

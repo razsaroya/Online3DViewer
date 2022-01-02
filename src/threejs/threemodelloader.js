@@ -1,6 +1,12 @@
 import {Importer} from "../import/importer.js";
 import {FileSource} from "../io/fileutils.js";
-import {ModelToThreeConversionOutput, ModelToThreeConversionParams} from "./threeconverter.js";
+import {
+    ConvertModelToThreeObject,
+    ModelToThreeConversionOutput,
+    ModelToThreeConversionParams
+} from "./threeconverter.js";
+import {HasHighpDriverIssue} from './threeutils.js';
+
 
 export class ThreeModelLoader
 {

@@ -1,44 +1,46 @@
 import domUtils from '../../../viewer/domutils.js';
+import {CreateVerticalSplitter} from "./splitter";
+import DomUtils from "../../../viewer/domutils.js";
 
-export class Utils {
+export default class Utils {
     
-    GetNameOrDefault(originalName, defaultName) {
+    static GetNameOrDefault(originalName, defaultName) {
         if (originalName.length > 0) {
             return originalName;
         }
         return defaultName;
     };
 
-    GetNodeName(originalName) {
+    static GetNodeName(originalName) {
         return this.GetNameOrDefault(originalName, 'No Name');
     };
 
-    GetMeshName(originalName) {
+    static GetMeshName(originalName) {
         return this.GetNameOrDefault(originalName, 'No Name');
     };
     
-    GetMaterialName(originalName) {
+    static GetMaterialName(originalName) {
         return this.GetNameOrDefault(originalName, 'No Name');
     };
     
-    IsHoverEnabled() {
+    static IsHoverEnabled() {
         return window.matchMedia('(hover: hover)').matches;
     };
 
-    AddSmallWidthChangeEventListener(onChange) {
+    static AddSmallWidthChangeEventListener(onChange) {
         let mediaQuery = window.matchMedia('(max-width: 800px)');
         mediaQuery.addEventListener('change', onChange);
     };
     
-    IsSmallWidth() {
+    static IsSmallWidth() {
         return window.matchMedia('(max-width: 800px)').matches;
     };
     
-    IsSmallHeight() {
+    static IsSmallHeight() {
         return window.matchMedia('(max-height: 800px)').matches;
     };
 
-    InstallTooltip(element, text) {
+    static InstallTooltip(element, text) {
         function CalculateOffset(element, tooltip) {
             let windowWidth = window.innerWidth;
 
@@ -78,7 +80,7 @@ export class Utils {
         });
     };
 
-    CopyToClipboard(text) {
+    static CopyToClipboard(text) {
         let input = document.createElement('input');
         input.style.position = 'absolute';
         input.style.left = '0';
@@ -90,7 +92,7 @@ export class Utils {
         document.body.removeChild(input);
     };
     
-    DownloadUrlAsFile(url, fileName) {
+    static DownloadUrlAsFile(url, fileName) {
         let link = document.createElement('a');
         link.href = url;
         link.download = fileName;
@@ -99,12 +101,12 @@ export class Utils {
         document.body.removeChild(link);
     };
 
-    DownloadArrayBufferAsFile(arrayBuffer, fileName) {
+    static DownloadArrayBufferAsFile(arrayBuffer, fileName) {
         let url = CreateObjectUrl(arrayBuffer);
         this.DownloadUrlAsFile(url, fileName);
     };
     
-    CreateSvgIconElement(iconName, className) {
+    static CreateSvgIconElement(iconName, className) {
         let iconDiv = domUtils.CreateDiv('ov_svg_icon');
         if (className) {
             iconDiv.classList.add(className);
@@ -113,18 +115,18 @@ export class Utils {
         return iconDiv;
     };
 
-    AddSvgIconElement(parentElement, iconName, className) {
+    static AddSvgIconElement(parentElement, iconName, className) {
         let iconDiv = this.CreateSvgIconElement(iconName, className);
         parentElement.appendChild(iconDiv);
         return iconDiv;
     };
 
-    SetSvgIconImageElement(iconElement, iconName) {
+    static SetSvgIconImageElement(iconElement, iconName) {
         let iconDiv = iconElement.firstChild;
         iconDiv.className = 'icon icon-' + iconName;
     };
     
-    CreateHeaderButton(parentElement, iconName, title, link) {
+    static CreateHeaderButton(parentElement, iconName, title, link) {
         let buttonLink = domUtils.CreateDomElement('a');
         buttonLink.setAttribute('href', link);
         buttonLink.setAttribute('target', '_blank');
@@ -135,7 +137,7 @@ export class Utils {
         return buttonLink;
     };
 
-    CreateInlineColorCircle(color) {
+    static CreateInlineColorCircle(color) {
         let hexString = '#' + this.ColorToHexString(color);
         let darkerColor = new this.Color(
           Math.max(0, color.r - 50),
@@ -149,11 +151,11 @@ export class Utils {
         return circleDiv;
     };
     
-    InstallVerticalSplitter(splitterDiv, resizedDiv, flipped, onResize) {
+    static InstallVerticalSplitter(splitterDiv, resizedDiv, flipped, onResize) {
         let originalWidth = null;
-        this.CreateVerticalSplitter(splitterDiv, {
+        CreateVerticalSplitter(splitterDiv, {
             onSplitStart: () => {
-                originalWidth = this.GetDomElementOuterWidth(resizedDiv);
+                originalWidth = DomUtils.GetDomElementOuterWidth(resizedDiv);
             },
             onSplit: (xDiff) => {
                 const minWidth = 280;

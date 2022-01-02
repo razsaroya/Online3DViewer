@@ -1,6 +1,6 @@
 import {PanelSet} from "./panelset.js";
 import {NavigatorFilesPanel, NavigatorMaterialsPanel, NavigatorMeshesPanel} from "./navigatorpanels.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import DomUtils from "../../../viewer/domutils.js";
 
 export let SelectionType =

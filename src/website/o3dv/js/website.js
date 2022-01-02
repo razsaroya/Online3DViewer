@@ -6,9 +6,9 @@ import {Sidebar} from "./sidebar.js";
 import {EventHandler} from "./eventhandler.js";
 import {Settings, Theme} from "./settings.js";
 import {ThreeModelLoader} from "../../../threejs/threemodelloader.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import DomUtils from "../../../viewer/domutils.js";
-import {SelectionType} from "./navigator.js";
+import {SelectionType, Navigator, Selection} from "./navigator.js";
 import {CalculatePopupPositionToScreen, ShowListPopup} from "./dialogs.js";
 import {ImportErrorCode, ImportSettings} from "../../../import/importer.js";
 import {ReplaceDefaultMaterialColor} from "../../../model/modelutils.js";
@@ -20,6 +20,7 @@ import {InitModelLoader} from "./loader.js";
 import {GetFileExtension} from "../../../io/fileutils.js";
 import {ShowCookieDialog} from "./cookiedialog.js";
 import {Color} from "../../../model/material.js";
+import {ThemeHandler} from "./themehandler";
 
 const websiteUIState =
 {
@@ -28,9 +29,6 @@ const websiteUIState =
     Model : 2,
     Loading : 3
 };
-
-class ThemeHandler {
-}
 
 export default class Website
 {

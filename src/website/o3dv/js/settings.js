@@ -1,3 +1,5 @@
+import {Color} from '../../../model/material';
+
 export let Theme = {
     Light : 1,
     Dark : 2

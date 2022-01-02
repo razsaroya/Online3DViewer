@@ -3,7 +3,7 @@ import {ShowMessageDialog} from "./dialogs.js";
 import {ButtonDialog} from "./modal.js";
 import DomUtils from "../../../viewer/domutils.js";
 import {Exporter} from "../../../export/exporter.js";
-import {Utils} from "./utils.js";
+import Utils from "./utils.js";
 import {CreateObjectUrl} from "../../../io/bufferutils.js";
 import {RunTaskAsync} from "../../../core/taskrunner.js";
 
